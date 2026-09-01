@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --color-ink: #e8ecf4;
+  --color-ink-dim: #98a3b8;
+  --color-ink-faint: #667085;
+  --color-bg: #0b0e14;
+  --color-panel: #121721;
+  --color-panel-2: #171d29;
+  --color-line: #232b3a;
+  --color-line-soft: #1b2230;
+
+  --color-hi: #4ade80;   /* logic 1 */
+  --color-lo: #64748b;   /* logic 0 */
+  --color-accent: #60a5fa;
+  --color-accent-2: #a78bfa;
+  --color-warn: #fbbf24;
+  --color-bad: #f87171;
+}
+
+* { border-color: var(--color-line); }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background:
+    radial-gradient(900px 500px at 15% -10%, rgba(96,165,250,0.09), transparent 60%),
+    radial-gradient(800px 500px at 95% 0%, rgba(167,139,250,0.08), transparent 55%),
+    var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+}
+
+::selection { background: rgba(96,165,250,0.3); }
+
+/* thin scrollbars so wide tables don't feel heavy */
+::-webkit-scrollbar { height: 9px; width: 9px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2a3446; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #3a465e; }
+
+.panel {
+  background: linear-gradient(180deg, var(--color-panel-2), var(--color-panel));
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+}
+
+.grid-paper {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Prose defaults for lesson bodies */
+.lesson h2 { font-size: 1.5rem; font-weight: 700; margin: 2.5rem 0 0.75rem; letter-spacing: -0.01em; }
+.lesson h3 { font-size: 1.1rem; font-weight: 650; margin: 1.75rem 0 0.5rem; color: var(--color-ink); }
+.lesson p { color: var(--color-ink-dim); line-height: 1.75; margin: 0.75rem 0; }
+.lesson ul { margin: 0.75rem 0; padding-left: 1.15rem; }
+.lesson li { color: var(--color-ink-dim); line-height: 1.7; margin: 0.35rem 0; list-style: disc; }
+.lesson li::marker { color: var(--color-accent); }
+.lesson strong { color: var(--color-ink); font-weight: 650; }
+.lesson code { font-family: var(--font-mono); font-size: 0.87em; background: #1b2230; border: 1px solid var(--color-line); padding: 0.1em 0.4em; border-radius: 5px; color: #cbd5e1; }
+.lesson a { color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
+
+@keyframes pulseWire { 0%,100% { opacity: 1 } 50% { opacity: 0.45 } }
