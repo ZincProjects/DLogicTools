@@ -66,7 +66,7 @@ export function KmapSolver() {
   };
 
   const cycle = (i: number) =>
-    setCells(cells.map((c, j) => (i === j ? (c === 0 ? 1 : c === 1 ? "x" : 0) : c)));
+    setCells((prev) => prev.map((c, j) => (i === j ? (c === 0 ? 1 : c === 1 ? "x" : 0) : c)));
 
   return (
     <div className="space-y-5">
@@ -338,8 +338,13 @@ export function PlaBuilder() {
     while (out.length < len) out.push(fill());
     return out;
   };
-  const T = fit(terms, nTerms, () => Array(nIn).fill("-") as PlaTerm).map((t) => fit(t, nIn, () => "-" as const));
-  const O = fit(orPlane, nOut, () => Array(nTerms).fill(false)).map((r) => fit(r, nTerms, () => false));
+  const padTerms = (arr: PlaTerm[]) =>
+    fit(arr, nTerms, () => Array(nIn).fill("-") as PlaTerm).map((t) => fit(t, nIn, () => "-" as const) as PlaTerm);
+  const padOr = (arr: boolean[][]) =>
+    fit(arr, nOut, () => Array(nTerms).fill(false)).map((r) => fit(r, nTerms, () => false));
+
+  const T = padTerms(terms);
+  const O = padOr(orPlane);
   const IN = fit(inputs, nIn, () => 0 as 0 | 1);
 
   const vars = VARNAMES.slice(0, nIn);
@@ -347,7 +352,9 @@ export function PlaBuilder() {
   const outputs = O.map((row) => (row.some((used, j) => used && termActive[j]) ? 1 : 0));
 
   const cycleCell = (ti: number, ci: number) =>
-    setTerms(T.map((t, i) => (i === ti ? t.map((c, j) => (j === ci ? (c === "-" ? "1" : c === "1" ? "0" : "-") : c)) as PlaTerm : t)));
+    setTerms((prev) =>
+      padTerms(prev).map((t, i) =>
+        i === ti ? (t.map((c, j) => (j === ci ? (c === "-" ? "1" : c === "1" ? "0" : "-") : c)) as PlaTerm) : t));
 
   return (
     <div className="space-y-5">
@@ -368,7 +375,7 @@ export function PlaBuilder() {
               {IN.map((b, i) => (
                 <div key={i} className="text-center">
                   <div className="text-[10px] font-mono text-[var(--color-ink-faint)] mb-1">{vars[i]}</div>
-                  <Bit v={b} onClick={() => setInputs(IN.map((x, j) => (i === j ? ((x ^ 1) as 0 | 1) : x)))} />
+                  <Bit v={b} onClick={() => setInputs((prev) => prev.map((x, j) => (i === j ? ((x ^ 1) as 0 | 1) : x)))} />
                 </div>
               ))}
             </div>
@@ -435,7 +442,7 @@ export function PlaBuilder() {
                   <td className="pr-4 font-mono text-sm text-[var(--color-accent-2)]">F{oi}</td>
                   {row.map((on, ti) => (
                     <td key={ti} className="px-1 py-1">
-                      <button onClick={() => setOrPlane(O.map((r, i) => (i === oi ? r.map((x, j) => (j === ti ? !x : x)) : r)))}
+                      <button onClick={() => setOrPlane((prev) => padOr(prev).map((r, i) => (i === oi ? r.map((x, j) => (j === ti ? !x : x)) : r)))}
                         className={`w-10 h-10 rounded-md border grid place-items-center transition hover:brightness-125
                           ${on ? (termActive[ti] ? "bg-[#12304a] border-[var(--color-accent)] text-[var(--color-accent)]" : "bg-[#1a2130] border-[var(--color-line)] text-[var(--color-ink-dim)]") : "bg-[#0d1219] border-[var(--color-line)] text-[var(--color-ink-faint)]"}`}>
                         {on ? "●" : "○"}

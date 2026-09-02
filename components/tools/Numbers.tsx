@@ -374,7 +374,7 @@ export function ParityLab() {
             <Label>Data bits (click to toggle)</Label>
             <div className="flex gap-1.5">
               {data.map((b, i) => (
-                <Bit key={i} v={b} onClick={() => setData(data.map((x, j) => (i === j ? ((x ^ 1) as 0 | 1) : x)))} />
+                <Bit key={i} v={b} onClick={() => setData((prev) => prev.map((x, j) => (i === j ? ((x ^ 1) as 0 | 1) : x)))} />
               ))}
             </div>
           </div>
@@ -403,7 +403,7 @@ export function ParityLab() {
           <div className="mt-4 flex gap-1.5 flex-wrap">
             {sent.map((b, i) => (
               <button key={i}
-                onClick={() => setFlipped(flipped.includes(i) ? flipped.filter((x) => x !== i) : [...flipped, i])}
+                onClick={() => setFlipped((prev) => (prev.includes(i) ? prev.filter((x) => x !== i) : [...prev, i]))}
                 className={`w-9 h-9 rounded-md font-mono font-bold border grid place-items-center transition
                   ${flipped.includes(i) ? "bg-[#301616] border-[var(--color-bad)] text-[var(--color-bad)]" : "bg-[#0d1219] border-[var(--color-line)] text-[var(--color-ink-dim)] hover:border-[var(--color-accent)]"}`}>
                 {flipped.includes(i) ? "⚡" : b}

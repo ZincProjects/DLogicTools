@@ -169,7 +169,7 @@ export function SerialParallel() {
           <div>
             <Label>The byte to send (click bits)</Label>
             <div className="flex gap-1">
-              {byte.map((b, i) => <Bit key={i} v={b} onClick={() => setByte(byte.map((x, j) => (i === j ? ((x ^ 1) as 0 | 1) : x)))} />)}
+              {byte.map((b, i) => <Bit key={i} v={b} onClick={() => setByte((prev) => prev.map((x, j) => (i === j ? ((x ^ 1) as 0 | 1) : x)))} />)}
             </div>
           </div>
           <button onClick={() => setRun(!run)} className="px-4 py-2.5 text-sm rounded-lg border border-[var(--color-line)] hover:border-[var(--color-accent)]">
@@ -424,7 +424,7 @@ export function CmosLab() {
               {c.inputs.map((name, i) => (
                 <div key={name} className="text-center">
                   <div className="text-[10px] font-mono text-[var(--color-ink-faint)] mb-1">{name}</div>
-                  <Bit v={I[i]} size="lg" onClick={() => setIns(ins.map((x, j) => (i === j ? ((x ^ 1) as 0 | 1) : x)))} />
+                  <Bit v={I[i]} size="lg" onClick={() => setIns((prev) => prev.map((x, j) => (i === j ? ((x ^ 1) as 0 | 1) : x)))} />
                 </div>
               ))}
             </div>
@@ -1118,11 +1118,11 @@ export function TristateLab() {
               <span className="font-mono text-sm text-[var(--color-ink-faint)] w-16">Driver {i + 1}</span>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-mono text-[var(--color-ink-faint)]">{mode === "tristate" ? "ENABLE" : "active"}</span>
-                <Bit v={d.en as 0 | 1} onClick={() => setDrivers(drivers.map((x, j) => (i === j ? { ...x, en: x.en ^ 1 } : x)))} />
+                <Bit v={d.en as 0 | 1} onClick={() => setDrivers((prev) => prev.map((x, j) => (i === j ? { ...x, en: x.en ^ 1 } : x)))} />
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-mono text-[var(--color-ink-faint)]">DATA</span>
-                <Bit v={d.d as 0 | 1} tone="accent" onClick={() => setDrivers(drivers.map((x, j) => (i === j ? { ...x, d: x.d ^ 1 } : x)))} />
+                <Bit v={d.d as 0 | 1} tone="accent" onClick={() => setDrivers((prev) => prev.map((x, j) => (i === j ? { ...x, d: x.d ^ 1 } : x)))} />
               </div>
               <span className="text-xs font-mono text-[var(--color-ink-dim)] ml-auto">
                 → drives {d.en ? (mode === "opendrain" && d.d === 1 ? "nothing (transistor off)" : d.d) : "Hi-Z (disconnected)"}
